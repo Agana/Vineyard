@@ -1,0 +1,19 @@
+Metadata-Version: 1.0
+Name: simplesms
+Version: 0.1.3
+Summary: Build SMS apps on top of a simple SMS/USSD gateway
+Home-page: http://github.com/eokyere/simplesms
+Author: Emmanuel Okyere
+Author-email: chief@hutspace.net
+License: UNKNOWN
+Description: 
+              
+              
+Keywords: gsm,sms,communication
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Other Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
