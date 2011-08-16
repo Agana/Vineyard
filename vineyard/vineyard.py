@@ -26,6 +26,7 @@ class Vineyard(Handler):
         phrase_prayer = re.match(r'^prayer.', rec_text, re.IGNORECASE)
 #       Bible verse query
         phrase_bible = re.match(r'^\w+\s\d+:\d+', rec_text, re.IGNORECASE)
+        phrase_bible_1_2 = re.match(r'^\d+\s\w+\s\d+:\d+', rec_text, re.IGNORECASE)
 #       Bible verse explanation request
         phrase_bible_explain = re.match(r'^explain\s\w+\s\d+:\d+', rec_text, re.IGNORECASE)
 #       Song request
@@ -80,7 +81,29 @@ class Vineyard(Handler):
 #           Sometimes King James italises words (insertions of translators)
 #           This removes the <i> and </i> html tags in such texts
             raw_text = re.sub("<i>", "", rawest_text)
-            text = re.sub("</i>", "", raw_text)
+            text = re.sub("</i>", "", raw_text) + " " + "\n<Thanks for using TFF Vineyard! www.thetruthforfree.org/vineyard>"
+            print text
+            self.send(message.sender, text)
+        
+        elif phrase_bible_1_2:
+            book_ind = rec_text.split()[0]
+            book_name = rec_text.split()[1]
+            chapter_verse = rec_text.split()[2]
+            chapter, verse = chapter_verse.split(':')
+            
+            
+            print book_ind, book_name, chapter, verse
+            
+            webpage = urllib2.urlopen('http://bible.cc/'+book_ind+'_'+book_name+'/'+chapter+'-'+verse+'.htm').read()
+            stuffToSearch = "".join(webpage)
+            search_for = r'<a href="http://kingjbible.com/'+book_ind+'_'+book_name+'/'+chapter+'.htm">King James Bible</a></span><br>(.*)<p><span class="versiontext"><a href="http://kjv.us/'+book_ind+'_'+book_name+'/'+chapter+'.htm">'
+            search_it = re.search(search_for, stuffToSearch)
+            rawest_text = (search_it.group(1))
+            
+#           Sometimes King James italises words (insertions of translators)
+#           This removes the <i> and </i> html tags in such texts
+            raw_text = re.sub("<i>", "", rawest_text)
+            text = re.sub("</i>", "", raw_text) + " " + "\n<Thanks for using TFF Vineyard! www.thetruthforfree.org/vineyard>"
             print text
             self.send(message.sender, text)
        
@@ -96,7 +119,7 @@ class Vineyard(Handler):
 #          search_for = r'<a href="http://kingjbible.com/'+book+'/'+chapter+'.htm">King James Bible</a></span><br>(.*)<p><span class="versiontext"><a href="http://kjv.us/'+book+'/'+chapter+'.htm">'
 #          search_it = re.search(search_for, stuffToSearch)
            my_set = book, chapter, verse
-           text = "One of our staff will soon reach you with an answer to your question on " + book + " " + chapter + ":" + verse + " . Thanks for using Vineyard!"
+           text = "One of our staff will soon reach you with an answer to your question on " + book + " " + chapter + ":" + verse + " . Thanks for using Vineyard! www.thetruthforfree.org/vineyard"
            print text
            self.send(message.sender, text) 
 #       This handles song requests (hymns for now)
@@ -108,7 +131,7 @@ class Vineyard(Handler):
             
         else:
 #           (If the message does not qualify for any of them)
-            text = "Sorry, your message is not understood. Please try again. Check for spelling and other errors."
+            text = "Sorry, your message is not understood. Please try again. Check for spelling and other errors. Thanks for using Vineyard! www.thetruthforfree.org"
             print text
         
             self.send(message.sender, text)
@@ -143,3 +166,6 @@ def main():
     
 if __name__ == "__main__":
     main()
+
+
+# Messages of exhortation delivered everyday
